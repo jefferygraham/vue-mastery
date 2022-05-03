@@ -97,6 +97,8 @@
     </div>
 </template>
 <script>
+import { auth, db } from '@/includes/firebase'; // @ = src
+
 export default {
   name: 'RegistrationForm',
   data() {
@@ -105,7 +107,7 @@ export default {
         name: 'required|min:3|max:100|alpha_spaces',
         email: 'required|min:3|max:100|email',
         age: 'required|min_value:18|max_value:100',
-        password: 'required|min:3|max:32|alpha_num',
+        password: 'required|min:6|max:32|alpha_num',
         confirm_password: 'passwords_mismatch:@password',
         country: 'required|country_excluded:Antarctica',
         tos: 'tos',
@@ -120,15 +122,26 @@ export default {
     };
   },
   methods: {
-    register(values) {
+    async register(values) {
       this.registering = true;
       this.registering_alert = true;
       this.registering_alert_variant = "bg-blue-500";
       this.registering_alert_message = 'Please wait. You account is being prepared.';
 
+      let userCredentials = null;
+
+      try {
+        userCredentials = await auth().createUserWithEmailAndPassword(values.email, values.password);
+      } catch (error) {
+        this.registering = false;
+        this.registering_alert_variant = "bg-red-500";
+        this.registering_alert_message = "Unexpected error occured. Please try again later.";
+        return;
+      }
+
       this.registering_alert_variant = 'bg-green-500';
       this.registering_alert_message = 'Success! Your account has been created.';
-      console.log(values);
+      console.log(userCredentials);
     },
   },
 };
