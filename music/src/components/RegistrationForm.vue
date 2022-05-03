@@ -97,7 +97,7 @@
     </div>
 </template>
 <script>
-import { auth, db } from '@/includes/firebase'; // @ = src
+import { auth } from '@/includes/firebase'; // @ = src
 
 export default {
   name: 'RegistrationForm',
