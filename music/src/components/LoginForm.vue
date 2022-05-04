@@ -53,15 +53,24 @@ export default {
     };
   },
   methods: {
-    login(values) {
+    async login(values) {
       this.loggingIn = true;
       this.loggingIn_alert = true;
       this.loggingIn_alert_variant = "bg-blue-500";
       this.loggingIn_alert_message = 'Please wait. You are being logged in';
 
+      try {
+        await this.$store.dispatch('login', values);
+      } catch (error) {
+        this.loggingIn = false;
+        this.loggingIn_alert_variant = "bg-red-500";
+        this.loggingIn_alert_message = 'Invalid login details.';
+        return;
+      }
+
       this.loggingIn_alert_variant = 'bg-green-500';
       this.loggingIn_alert_message = 'Success! You are now logged in.';
-      console.log(values);
+      window.location.reload();
     },
   },
 };
