@@ -97,7 +97,6 @@
     </div>
 </template>
 <script>
-import { auth } from '@/includes/firebase'; // @ = src
 
 export default {
   name: 'RegistrationForm',
@@ -128,10 +127,8 @@ export default {
       this.registering_alert_variant = "bg-blue-500";
       this.registering_alert_message = 'Please wait. You account is being prepared.';
 
-      let userCredentials = null;
-
       try {
-        userCredentials = await auth().createUserWithEmailAndPassword(values.email, values.password);
+        await this.$store.dispatch('register', values);
       } catch (error) {
         this.registering = false;
         this.registering_alert_variant = "bg-red-500";
@@ -141,7 +138,6 @@ export default {
 
       this.registering_alert_variant = 'bg-green-500';
       this.registering_alert_message = 'Success! Your account has been created.';
-      console.log(userCredentials);
     },
   },
 };

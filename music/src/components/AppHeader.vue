@@ -30,9 +30,6 @@ export default {
   name: 'AppHeader',
   methods: {
     ...mapMutations(['toggleAuthModal']),
-    // toggleAuthModal() {
-    //   this.$store.commit('toggleAuthModal');
-    // },
   },
 };
 </script>

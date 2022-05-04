@@ -8,18 +8,20 @@ import "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyC0wrMcfHBI8NJXR1OC2WyAqIQQCMzs830",
-  authDomain: "music-20fd6.firebaseapp.com",
-  projectId: "music-20fd6",
-  storageBucket: "music-20fd6.appspot.com",
-  appId: "1:224788380890:web:aeda41029da11e1914b9e3",
+  apiKey: "AIzaSyDPuP9QyrOci0gb7ZkZVqnAoUGLM2f22UE",
+  authDomain: "music-a8758.firebaseapp.com",
+  projectId: "music-a8758",
+  storageBucket: "music-a8758.appspot.com",
+  appId: "1:77720731712:web:1aee784f062bfbecffdfa5",
 };
-
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
 // References
 const auth = firebase.auth();
 const db = firebase.firestore();
+db.settings({ experimentalForceLongPolling: true });
 
-export { auth, db };
+const usersCollection = db.collection("users");
+
+export { auth, usersCollection };
