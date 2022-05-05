@@ -1,26 +1,59 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "../views/HomeView.vue";
+import HomeView from "@/views/HomeView.vue";
+import AboutView from "@/views/AboutView.vue";
+import ManageView from "@/views/ManageView.vue";
+import store from "@/store";
 
 const routes = [
   {
+    name: "home",
     path: "/",
-    name: "Home",
-    component: Home,
+    component: HomeView,
   },
   {
+    name: "about",
     path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
+    component: AboutView,
   },
+  {
+    name: "manage",
+    path: "/manage-music",
+    meta: { requiresAuth: true },
+    component: ManageView,
+    alias: "/manage",
+    beforeEnter: (to, from, next) => {
+      console.log("Manage Route Guard");
+      next();
+    },
+  },
+  {
+    path: "/manage",
+    redirect: { name: "manage" },
+  },
+  // {
+  //   path: "/:catchAll(.*)*",
+  //   redirect: { name: "home" },
+  // },
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+  linkExactActiveClass: "text-yellow-600",
+});
+
+router.beforeEach((to, from, next) => {
+  // console.log(to.matched);
+  if (!to.matched.some((record) => record.meta.requiresAuth)) {
+    next();
+    return;
+  }
+
+  if (store.state.userLoggedIn) {
+    next();
+  } else {
+    next({ name: "home" });
+  }
 });
 
 export default router;
