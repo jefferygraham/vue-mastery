@@ -12,7 +12,7 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'vuejs-accessibility/label-has-for': 'off',
     'vuejs-accessibility/click-events-have-key-events': 'off',
-    'max-len': ['error', { code: 170 }],
+    'max-len': ['error', { code: 275 }],
     quotes: [0, 'double'],
     'implicit-arrow-linebreak': 'off',
     'linebreak-style': 0,
