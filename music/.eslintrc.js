@@ -16,6 +16,11 @@ module.exports = {
     quotes: [0, 'double'],
     'implicit-arrow-linebreak': 'off',
     'linebreak-style': 0,
+    'operator-linebreak': [
+      'error',
+      'after',
+      { overrides: { '?': 'before', ':': 'before' } },
+    ],
   },
   overrides: [
     {
