@@ -28,7 +28,12 @@
 
           <!-- File Input -->
           <label for="uploadInput"></label>
-          <input type="file" name="uploadInput" multiple @change="upload($event)"/>
+          <input
+            type="file"
+            name="uploadInput"
+            multiple
+            @change="upload($event)"
+          />
           <hr class="my-6" />
           <!-- Progress Bars -->
           <div class="mb-4" v-for="upload in uploads" :key="upload.name">
@@ -54,6 +59,12 @@ import { storage, auth, songsCollection } from '@/includes/firebase';
 
 export default {
   name: 'FileUpload',
+  props: {
+    addSong: {
+      type: Function,
+      required: true,
+    },
+  },
   data() {
     return {
       is_dragover: false,
@@ -64,7 +75,9 @@ export default {
     upload($event) {
       this.is_dragover = false;
 
-      const files = $event.dataTransfer ? [...$event.dataTransfer.files] : [...$event.target.files];
+      const files = $event.dataTransfer
+        ? [...$event.dataTransfer.files]
+        : [...$event.target.files];
 
       files.forEach((file) => {
         if (file.type === 'audio/mpeg') {
@@ -108,7 +121,9 @@ export default {
               };
 
               song.url = await task.snapshot.ref.getDownloadURL();
-              await songsCollection.add(song);
+              const songRef = await songsCollection.add(song);
+              const songSnapshot = await songRef.get();
+              this.addSong(songSnapshot);
 
               this.uploads[uploadIndex].variant = 'bg-green-400';
               this.uploads[uploadIndex].icon = 'fas fa-check';
