@@ -1,45 +1,51 @@
-import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "@/views/HomeView.vue";
-import AboutView from "@/views/AboutView.vue";
-import ManageView from "@/views/ManageView.vue";
-import store from "@/store";
+import { createRouter, createWebHistory } from 'vue-router';
+import HomeView from '@/views/HomeView.vue';
+import AboutView from '@/views/AboutView.vue';
+import ManageView from '@/views/ManageView.vue';
+import SongView from '@/views/SongView.vue';
+import store from '@/store';
 
 const routes = [
   {
-    name: "home",
-    path: "/",
+    name: 'home',
+    path: '/',
     component: HomeView,
   },
   {
-    name: "about",
-    path: "/about",
+    name: 'about',
+    path: '/about',
     component: AboutView,
   },
   {
-    name: "manage",
-    path: "/manage-music",
+    name: 'manage',
+    path: '/manage-music',
     meta: { requiresAuth: true },
     component: ManageView,
-    alias: "/manage",
+    alias: '/manage',
     beforeEnter: (to, from, next) => {
-      console.log("Manage Route Guard");
+      console.log('Manage Route Guard');
       next();
     },
   },
   {
-    path: "/manage",
-    redirect: { name: "manage" },
+    path: '/manage',
+    redirect: { name: 'manage' },
   },
-  // {
-  //   path: "/:catchAll(.*)*",
-  //   redirect: { name: "home" },
-  // },
+  {
+    name: 'song',
+    path: '/song/:id',
+    component: SongView,
+  },
+  {
+    path: '/:catchAll(.*)*',
+    redirect: { name: 'home' },
+  },
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-  linkExactActiveClass: "text-yellow-600",
+  linkExactActiveClass: 'text-yellow-600',
 });
 
 router.beforeEach((to, from, next) => {
@@ -52,7 +58,7 @@ router.beforeEach((to, from, next) => {
   if (store.state.userLoggedIn) {
     next();
   } else {
-    next({ name: "home" });
+    next({ name: 'home' });
   }
 });
 
