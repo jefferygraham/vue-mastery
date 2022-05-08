@@ -26,7 +26,6 @@ db.settings({ experimentalForceLongPolling: true });
 
 const usersCollection = db.collection('users');
 const songsCollection = db.collection('songs');
+const commentsCollection = db.collection('comments');
 
-export {
-  auth, usersCollection, storage, songsCollection,
-};
+export { auth, usersCollection, storage, songsCollection, commentsCollection };

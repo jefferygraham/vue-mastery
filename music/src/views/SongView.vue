@@ -29,19 +29,34 @@
         <i class="fa fa-comments float-right text-green-400 text-2xl"></i>
       </div>
       <div class="p-6">
-        <form>
+        <div
+          class="text-white text-center font-bold p-4 mb-4"
+          v-if="comment_show_alert"
+          :class="comment_alert_variant"
+        >
+          {{ comment_alert_msg }}
+        </div>
+        <vee-form
+          :validation-schema="schema"
+          @submit="addComment"
+          v-if="userLoggedIn"
+        >
           <label for="comment"></label>
-          <textarea
+          <vee-field
+            as="textarea"
+            name="comment"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded mb-4"
             placeholder="Your comment here..."
-          ></textarea>
+          ></vee-field>
+          <ErrorMessage name="comment" class="text-red-600" />
           <button
             type="submit"
             class="py-1.5 px-3 rounded text-white bg-green-600 block"
+            :disabled="comment_in_submission"
           >
             Submit
           </button>
-        </form>
+        </vee-form>
         <!-- Sort Comments -->
         <select
           class="block mt-4 py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
@@ -130,13 +145,21 @@
 </template>
 
 <script>
-import { songsCollection } from '@/includes/firebase';
+import { auth, songsCollection, commentsCollection } from '@/includes/firebase';
+import { mapState } from 'vuex';
 
 export default {
   name: 'SongView',
   data() {
     return {
       song: {},
+      schema: {
+        comment: 'required|min:3',
+      },
+      comment_in_submission: false,
+      comment_show_alert: false,
+      comment_alert_variant: 'bg-blue-500',
+      comment_alert_msg: 'Please wait. Comment is being submitted.',
     };
   },
   async created() {
@@ -148,6 +171,36 @@ export default {
     }
 
     this.song = docSnapshop.data();
+  },
+  computed: {
+    ...mapState(['userLoggedIn']),
+  },
+  methods: {
+    async addComment(values, { resetForm }) {
+      this.comment_in_submission = true;
+      this.comment_show_alert = true;
+      this.comment_alert_variant = 'bg-blue-500';
+      this.comment_alert_msg = 'Please wait. Comment is being submitted.';
+
+      const comment = {
+        content: values.comment,
+        datePosted: new Date().toString(),
+        sid: this.$route.params.id,
+        name: auth.currentUser.displayName,
+        uid: auth.currentUser.uid,
+      };
+
+      try {
+        await commentsCollection.add(comment);
+        this.comment_in_submission = false;
+        this.comment_alert_variant = 'bg-green-500';
+        this.comment_alert_msg = 'Comment added!';
+        resetForm();
+      } catch (error) {
+        this.comment_alert_variant = 'bg-red-500';
+        this.comment_alert_msg = 'An error occurred. Please try again later';
+      }
+    },
   },
 };
 </script>
