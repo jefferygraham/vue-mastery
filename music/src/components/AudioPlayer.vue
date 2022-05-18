@@ -6,7 +6,7 @@
     <div class="relative">
       <!-- Play/Pause Button -->
       <div class="float-left w-7 h-7 leading-3">
-        <button type="button" @click="toggleAudio">
+        <button type="button" @click.prevent="toggleAudio">
           <i
             class="fa text-gray-500 text-xl"
             :class="{ 'fa-play': !playing, 'fa-pause': playing }"
@@ -17,7 +17,7 @@
       <div
         class="float-left w-7 h-7 leading-3 text-gray-400 mt-0 text-lg w-14 ml-5 mt-1"
       >
-        <span class="player-currenttime">00:00</span>
+        <span class="player-currenttime">{{ seek }}</span>
       </div>
       <!-- Scrub -->
       <div class="float-left w-7 h-7 leading-3 ml-7 mt-2 player-scrub">
@@ -46,14 +46,14 @@
       <div
         class="float-left w-7 h-7 leading-3 text-gray-400 mt-0 text-lg w-14 ml-8 mt-1"
       >
-        <span class="player-duration">03:06</span>
+        <span class="player-duration">{{ duration }}</span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 
 export default {
   name: 'AudioPlayer',
@@ -62,6 +62,7 @@ export default {
   },
   computed: {
     ...mapGetters(['playing']),
+    ...mapState(['seek', 'duration']),
   },
 };
 </script>
