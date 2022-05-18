@@ -1,11 +1,13 @@
 import { createStore } from 'vuex';
 import { auth, usersCollection } from '@/includes/firebase'; // @ = src
+import { Howl } from 'howler';
 
 export default createStore({
   state: {
     authModalShow: false,
     userLoggedIn: false,
     currentSong: {},
+    sound: {},
   },
   mutations: {
     toggleAuthModal: (state) => {
@@ -16,6 +18,11 @@ export default createStore({
     },
     newSong: (state, payload) => {
       state.currentSong = payload;
+
+      state.sound = new Howl({
+        src: [payload.url],
+        html5: true,
+      });
     },
   },
   getters: {
@@ -55,9 +62,12 @@ export default createStore({
       //   payload.router.push({ name: "home" });
       // }
     },
-    async newSong({ commit }, payload) {
+    async newSong({ commit, state }, payload) {
       commit('newSong', payload);
+
+      state.sound.play();
     },
+
     init_login({ commit }) {
       const user = auth.currentUser;
 

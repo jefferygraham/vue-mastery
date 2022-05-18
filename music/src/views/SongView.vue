@@ -126,7 +126,6 @@ export default {
   },
   computed: {
     ...mapState(['userLoggedIn']),
-    ...mapActions(['newSong']),
     sortedComments() {
       return this.comments.slice().sort((a, b) => {
         if (this.sort === '1') {
@@ -137,6 +136,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions(['newSong']),
     async addComment(values, { resetForm }) {
       this.comment_in_submission = true;
       this.comment_show_alert = true;
