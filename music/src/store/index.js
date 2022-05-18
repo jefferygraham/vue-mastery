@@ -1,10 +1,11 @@
-import { createStore } from "vuex";
-import { auth, usersCollection } from "@/includes/firebase"; // @ = src
+import { createStore } from 'vuex';
+import { auth, usersCollection } from '@/includes/firebase'; // @ = src
 
 export default createStore({
   state: {
     authModalShow: false,
     userLoggedIn: false,
+    currentSong: {},
   },
   mutations: {
     toggleAuthModal: (state) => {
@@ -12,6 +13,9 @@ export default createStore({
     },
     toggleUserLoggedIn: (state) => {
       state.userLoggedIn = !state.userLoggedIn;
+    },
+    newSong: (state, payload) => {
+      state.currentSong = payload;
     },
   },
   getters: {
@@ -35,27 +39,30 @@ export default createStore({
         displayName: payload.name,
       });
 
-      commit("toggleUserLoggedIn");
+      commit('toggleUserLoggedIn');
     },
     async login({ commit }, payload) {
       await auth.signInWithEmailAndPassword(payload.email, payload.password);
 
-      commit("toggleUserLoggedIn");
+      commit('toggleUserLoggedIn');
     },
-    signout({ commit }) {
+    async signout({ commit }) {
       auth.signOut();
 
-      commit("toggleUserLoggedIn");
+      commit('toggleUserLoggedIn');
 
       // if (payload.route.meta.requiresAuth) {
       //   payload.router.push({ name: "home" });
       // }
     },
+    async newSong({ commit }, payload) {
+      commit('newSong', payload);
+    },
     init_login({ commit }) {
       const user = auth.currentUser;
 
       if (user) {
-        commit("toggleUserLoggedIn");
+        commit('toggleUserLoggedIn');
       }
     },
   },
