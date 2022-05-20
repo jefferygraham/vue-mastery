@@ -35,7 +35,7 @@
             @change="upload($event)"
           />
           <hr class="my-6" />
-          <!-- Progress Bars -->
+
           <div class="mb-4" v-for="upload in uploads" :key="upload.name">
             <div class="font-bold text-sm" :class="upload.text_class">
               <i :class="upload.icon"></i> {{ upload.name }}
