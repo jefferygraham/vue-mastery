@@ -11,6 +11,7 @@ export default createStore({
     sound: {},
     seek: '00.00',
     duration: '00.00',
+    playerProgress: '0%',
   },
   mutations: {
     toggleAuthModal: (state) => {
@@ -20,6 +21,9 @@ export default createStore({
       state.userLoggedIn = !state.userLoggedIn;
     },
     newSong: (state, payload) => {
+      if (state.sound instanceof Howl) {
+        state.sound.unload();
+      }
       state.currentSong = payload;
 
       state.sound = new Howl({
@@ -30,6 +34,9 @@ export default createStore({
     updatePosition(state) {
       state.seek = helper.formatTime(state.sound.seek());
       state.duration = helper.formatTime(state.sound.duration());
+      state.playerProgress = `${
+        (state.sound.seek() / state.sound.duration()) * 100
+      }%`;
     },
   },
   getters: {
