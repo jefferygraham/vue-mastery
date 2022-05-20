@@ -30,15 +30,19 @@
             >(Uploaded by {{ currentSong.display_name }})</span
           >
         </div>
+        <!-- Scrub Container -->
         <span
           class="block w-full h-2 rounded m-1 mt-2 bg-gray-200 relative cursor-pointer"
+          @click.prevent="updateSeek"
         >
+          <!-- Player Ball -->
           <span
             class="absolute top-neg-8 text-gray-800 text-lg"
             :style="{ left: playerProgress }"
           >
             <i class="fas fa-circle"></i>
           </span>
+          <!-- Player Progress Bar -->
           <span
             class="block h-2 rounded bg-gradient-to-r from-green-500 to-green-400"
             :style="{ width: playerProgress }"
@@ -61,7 +65,7 @@ import { mapActions, mapGetters, mapState } from 'vuex';
 export default {
   name: 'AudioPlayer',
   methods: {
-    ...mapActions(['toggleAudio']),
+    ...mapActions(['toggleAudio', 'updateSeek']),
   },
   computed: {
     ...mapGetters(['playing']),
