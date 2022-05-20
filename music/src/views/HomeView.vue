@@ -40,7 +40,7 @@
         <ol id="playlist">
           <song-item v-for="song in songs" :key="song.docId" :song="song" />
         </ol>
-        <!-- .. end Playlist -->
+        <!--  end Playlist -->
       </div>
     </section>
   </main>
