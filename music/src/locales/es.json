@@ -1,5 +1,8 @@
 {
   "home": {
     "listen": " ¡Escucha buena música!"
+  },
+  "song": {
+    "comment_count": "{count} Comments"
   }
 }
