@@ -2,6 +2,9 @@
   "home": {
     "listen": " ¡Escucha buena música!"
   },
+  "manage": {
+    "my_songs": "Mis Canciones"
+  },
   "register": {
     "accept": "",
     "tos": ""
